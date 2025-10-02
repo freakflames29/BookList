@@ -11,39 +11,30 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import FontsVariant from './src/utils/FontsVariant';
-
+import SignIn from './src/Screens/Auth/SignIn';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import NavigationContainerWrapper from './src/Adapter/Navigation/NavigationContainerWrapper';
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} translucent={true} backgroundColor={"transparent"} />
-      <AppContent />
-    </SafeAreaProvider>
-  );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          color:"white",
-          fontSize: 40,
-          fontFamily: FontsVariant.UrbanistBold
-        }}
-      >Hello</Text>
-    </View>
+    <GestureHandlerRootView style={styles.container}>
+      <SafeAreaProvider>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          translucent={true}
+          backgroundColor={'transparent'}
+        />
+        <NavigationContainerWrapper/>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 
