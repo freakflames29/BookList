@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import React from 'react';
 import { useResponsive } from '../hooks/useResponsive';
 import BookCard from './BookCard';
@@ -16,7 +16,8 @@ type BookStatusCardProps = {
   currentPage?:number;
   totalPages?:number;
   status?:string;
-  author?:string
+  author?:string,
+  onPress?:()=>void
 }
 
 const BookStatusCard : React.FC<BookStatusCardProps> = (props) => {
@@ -25,7 +26,7 @@ const BookStatusCard : React.FC<BookStatusCardProps> = (props) => {
   const percents = props?.currentPage && props?.totalPages ? props?.currentPage / props?.totalPages * 100 : 0;
   console.log("The Book Image>>>",props?.bookImage)
   return (
-    <View
+    <Pressable onPress={props?.onPress}
       style={{
         flex: 1,
         flexDirection: 'row',
@@ -50,7 +51,7 @@ const BookStatusCard : React.FC<BookStatusCardProps> = (props) => {
         <Text style={styles.subtitle}>By {  props?.author || "Prabhupada"}</Text>
         <Text style={[styles.bigText, { color: colors.primary }]}>{percents.toFixed(0)}%</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -64,7 +65,7 @@ const makeStyles = ({ wp, hp }: StyleProps) =>
       // marginVertical:wp(8),
       paddingLeft: wp(2),
       gap: wp(3),
-      width: '90%',
+      width: '70%',
       // backgroundColor:"red",
     },
     subtitle: {

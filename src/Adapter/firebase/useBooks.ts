@@ -71,6 +71,7 @@ const useBooks = () => {
 
   // 🔹 Update a book
   const updateBook = useCallback(async (bookId: string, updates: Partial<Book>) => {
+    setLoading(true)
     try {
       if (!user) throw new Error("No user logged in");
       await firestore()
@@ -83,6 +84,7 @@ const useBooks = () => {
       console.error("Error updating book:", e);
       setError(e.message);
     }
+    setLoading(false)
   }, [user]);
 
   // 🔹 Delete a book
