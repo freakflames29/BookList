@@ -1,27 +1,17 @@
-import { View, Text, Button, Image, FlatList } from 'react-native';
+import { View, Text, Button, Image, SectionList } from 'react-native';
 import React from 'react';
 import makeStyles from './HomeStyle';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import {
-  ScreenParamList,
-  ScreenTypes,
-} from '../../Adapter/Navigation/ScreenTypes';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import useFirebaseAuth from '../../hooks/useGoogleAuth';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useAppSelector } from '../../Adapter/Redux/useAppSelector';
 import SafePlace from '../../components/SafePlace';
 import { imagePath } from '../../utils/imagepath';
 import BookCard from '../../components/BookCard';
-
-// type HomeNavProps = NativeStackNavigationProp<
-//   ScreenParamList,
-//   ScreenTypes.Home
-// >;
-// type HomeRouteProp = RouteProp<
-//   ScreenParamList,
-//   ScreenTypes.Home
-// >;
+import { BOOK_IMAGE } from '../../utils/constants';
+import { BlankSpace } from '../../components/BlankSpace';
+import { colors } from '../../utils/colors';
+import BookStatusCard from '../../components/BookStatusCard';
 
 const Home = () => {
   const { wp, hp } = useResponsive();
@@ -40,6 +30,19 @@ const Home = () => {
         console.log('Error while logging out', e);
       });
   };
+
+  // 🔹 Sectioned Data
+  const sections = [
+    {
+      title: 'New Hot Books',
+      data: [Array(10).fill(1)], // keep inside array to render one row
+    },
+    {
+      title: 'Your Books',
+      data: Array(10).fill(1),
+    },
+  ];
+
   return (
     <SafePlace top>
       <View style={styles.container}>
@@ -48,18 +51,43 @@ const Home = () => {
           <Text style={[styles.text, styles.bigText]}>BOOKS</Text>
         </View>
 
-        <View style={styles.wrapperList}>
-          <FlatList
-            data={Array(10).fill(1)}
-            horizontal
-            contentContainerStyle={styles.rowView}
-            renderItem={({ item }) => <BookCard />}
-          />
-          <View style={styles.shelf}>
-            <Image source={imagePath.screw} style={styles.screwImg} />
-            <Image source={imagePath.screw} style={styles.screwImg} />
-          </View>
-        </View>
+        <SectionList
+          sections={sections}
+          keyExtractor={(item, index) => index.toString()}
+          renderSectionHeader={({ section: { title } }) => (
+            <View style={{ paddingVertical: hp(2) }}>
+              <Text style={[styles.text, { marginLeft: wp(5) }]}>{title}</Text>
+            </View>
+          )}
+          renderItem={({ item, section }) => {
+            if (section.title === 'New Hot Books') {
+              // 🔹 First Section: horizontal books
+              return (
+                <View style={styles.wrapperList}>
+                  <SectionList
+                    sections={[{ title: '', data: item }]}
+                    horizontal
+                    contentContainerStyle={styles.rowView}
+                    renderItem={() => <BookCard bookImage={BOOK_IMAGE} />}
+                  />
+                  <View style={styles.shelf}>
+                    <Image source={imagePath.screw} style={styles.screwImg} />
+                    <Image source={imagePath.screw} style={styles.screwImg} />
+                  </View>
+                </View>
+              );
+            } else {
+              // 🔹 Second Section: grid books
+              return <BookStatusCard />;
+            }
+          }}
+          // numColumns={2}
+          // columnWrapperStyle={{
+          // justifyContent: 'space-evenly',
+          // }}
+          ItemSeparatorComponent={() => <BlankSpace height={wp(4)} />}
+          contentContainerStyle={styles.colviewFlatlist}
+        />
       </View>
     </SafePlace>
   );

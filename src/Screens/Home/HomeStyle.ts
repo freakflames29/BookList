@@ -30,14 +30,22 @@ const makeStyles = ({ wp, hp }: StyleProps) =>
       lineHeight: wp(13),
     },
     rowView:{
-      flexDirection:'row',
+      // flexDirection:'row',
       gap:wp(3),
       paddingHorizontal:wp(5),
       // justifyContent:'space-between',
     },
+    colviewFlatlist:{
+      width:"100%",
+      gap:wp(3),
+  
+
+
+    },
     wrapperList:{
       // width:wp(100),
-      position:"relative"
+      position:"relative",
+      marginBottom:hp(5),
     },
     shelf:{
       width:"96%",
@@ -59,8 +67,27 @@ const makeStyles = ({ wp, hp }: StyleProps) =>
       width:wp(5),
       height:wp(5),
       elevation:5,
+    },
+    BookcompleteHeading:{
+      fontSize:wp(6),
+      flexWrap:"wrap",
+    },
+    completedContainer:{
+      // marginVertical:wp(8),
+      paddingLeft:wp(2),
+      gap:wp(3),
+      width:"90%",
+      // backgroundColor:"red",
+
+    },
+    subtitle:{
+        fontSize:wp(5),
+    },
+    BookcompleteHead:{
+      fontSize:wp(6),
+      fontFamily:FontsVariant.UrbanistSemiBold,
     }
- 
+    
   });
 
 export default makeStyles;
