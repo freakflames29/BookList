@@ -15,19 +15,23 @@ import SignIn from './src/Screens/Auth/SignIn';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import NavigationContainerWrapper from './src/Adapter/Navigation/NavigationContainerWrapper';
+import { Provider } from 'react-redux';
+import { store } from './src/Adapter/Redux/Store';
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <SafeAreaProvider>
-        <StatusBar
-          barStyle={'dark-content'}
-          translucent={true}
-          backgroundColor={'#fff'}
-        />
-        <NavigationContainerWrapper/>
-      </SafeAreaProvider>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <StatusBar
+            barStyle={'dark-content'}
+            translucent={true}
+            backgroundColor={'#fff'}
+          />
+          <NavigationContainerWrapper />
+        </SafeAreaProvider>
+      </Provider>
     </GestureHandlerRootView>
   );
 }

@@ -1,16 +1,35 @@
 import { View, Text, Image, Alert } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import makeStyles from './SiginStyle';
 import { useResponsive } from '../../hooks/useResponsive';
 import SafePlace from '../../components/SafePlace';
 import { imagePath } from '../../utils/imagepath';
 import AppButton from '../../components/AppButton';
 import { BlankSpace } from '../../components/BlankSpace';
+// import { googleSigin, googleSignOut } from '../../utils/googleLogin';
+import useFirebaseAuth from '../../hooks/useGoogleAuth';
+import { useNavigation } from '@react-navigation/native';
+import { ScreenTypes } from '../../Adapter/Navigation/ScreenTypes';
+import { useAppDispatch } from '../../Adapter/Redux/useAppDispatch';
+import { userActions } from '../../Adapter/Redux/Slices/userSlice';
 
 const SignIn = () => {
   const { wp, hp } = useResponsive();
 
+  const { googleSigin, googleSignOut, loading, user } = useFirebaseAuth();
+  const navigation = useNavigation();
   const styles = makeStyles({ wp, hp });
+  const dispatch = useAppDispatch();
+  const siginHandler = () => {
+    googleSigin()
+      .then(res => {
+        dispatch(userActions.setUser(res));
+        navigation.navigate(ScreenTypes.Home);
+      })
+      .catch(e => {
+        console.log('Error', e);
+      });
+  };
 
   return (
     <SafePlace top>
@@ -22,7 +41,7 @@ const SignIn = () => {
           <Image source={imagePath.signin} style={styles.image} />
         </View>
         <BlankSpace height={hp(10)} />
-        <AppButton text="Continue with Google" onPress={() => Alert.alert("Hi")} />
+        <AppButton text="Continue with Google" onPress={() => siginHandler()} />
       </View>
     </SafePlace>
   );
