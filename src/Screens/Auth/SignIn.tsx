@@ -12,18 +12,20 @@ import { useNavigation } from '@react-navigation/native';
 import { ScreenTypes } from '../../Adapter/Navigation/ScreenTypes';
 import { useAppDispatch } from '../../Adapter/Redux/useAppDispatch';
 import { userActions } from '../../Adapter/Redux/Slices/userSlice';
+import { MMKVStorageController, PersistanceStorageKey } from '../../Adapter/Storage/MMKVStorageController';
 
 const SignIn = () => {
   const { wp, hp } = useResponsive();
 
   const { googleSigin, googleSignOut, loading, user } = useFirebaseAuth();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const styles = makeStyles({ wp, hp });
   const dispatch = useAppDispatch();
   const siginHandler = () => {
     googleSigin()
       .then(res => {
         dispatch(userActions.setUser(res));
+        MMKVStorageController.SET_DATA(PersistanceStorageKey.USER_INFO, res);
         navigation.navigate(ScreenTypes.Home);
       })
       .catch(e => {

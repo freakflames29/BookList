@@ -1,7 +1,7 @@
 import { View, Text, Button, Image, SectionList } from 'react-native';
 import React from 'react';
 import makeStyles from './HomeStyle';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import useFirebaseAuth from '../../hooks/useGoogleAuth';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useAppSelector } from '../../Adapter/Redux/useAppSelector';
@@ -12,19 +12,35 @@ import { BOOK_IMAGE } from '../../utils/constants';
 import { BlankSpace } from '../../components/BlankSpace';
 import { colors } from '../../utils/colors';
 import BookStatusCard from '../../components/BookStatusCard';
+import { ScreenTypes } from '../../Adapter/Navigation/ScreenTypes';
+import { MMKVStorageController } from '../../Adapter/Storage/MMKVStorageController';
+import { useAppDispatch } from '../../Adapter/Redux/useAppDispatch';
+import { userActions } from '../../Adapter/Redux/Slices/userSlice';
 
 const Home = () => {
   const { wp, hp } = useResponsive();
   const styles = makeStyles({ wp, hp });
   const { googleSignOut } = useFirebaseAuth();
   const user = useAppSelector(state => state.userReducer.user);
+  const dispatch = useAppDispatch();
 
   const navigation = useNavigation();
   const logout = () => {
     googleSignOut()
       .then(() => {
         console.log('Logged out');
-        navigation.goBack();
+        MMKVStorageController.CLEAR_ALL();
+        dispatch(userActions.removeUser());
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              {
+                name: ScreenTypes.SignIn,
+              },
+            ],
+          }),
+        );
       })
       .catch(e => {
         console.log('Error while logging out', e);
@@ -48,7 +64,8 @@ const Home = () => {
       <View style={styles.container}>
         <View style={styles.headingContainer}>
           <Text style={styles.text}>Your</Text>
-          <Text style={[styles.text, styles.bigText]}>BOOKS</Text>
+          <Text style={[styles.text, styles.bigText]}>Books</Text>
+          {/* <Button title="logut" onPress={logout} /> */}
         </View>
 
         <SectionList
