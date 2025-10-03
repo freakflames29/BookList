@@ -22,9 +22,9 @@ function App() {
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>
         <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          barStyle={'dark-content'}
           translucent={true}
-          backgroundColor={'transparent'}
+          backgroundColor={'#fff'}
         />
         <NavigationContainerWrapper/>
       </SafeAreaProvider>
