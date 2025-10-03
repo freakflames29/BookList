@@ -10,9 +10,20 @@ type StyleProps = {
   hp: (height: number) => number;
 };
 
-const BookStatusCard = () => {
+type BookStatusCardProps = {
+  bookName?:string;
+  bookImage?:string;
+  currentPage?:number;
+  totalPages?:number;
+  status?:string;
+  author?:string
+}
+
+const BookStatusCard : React.FC<BookStatusCardProps> = (props) => {
   const { wp, hp } = useResponsive();
   const styles = makeStyles({ wp, hp });
+  const percents = props?.currentPage && props?.totalPages ? props?.currentPage / props?.totalPages * 100 : 0;
+  console.log("The Book Image>>>",props?.bookImage)
   return (
     <View
       style={{
@@ -23,7 +34,7 @@ const BookStatusCard = () => {
       }}
     >
       <BookCard
-        bookImage={BOOK_IMAGE}
+        bookImage={props?.bookImage}
         style={{
           width: wp(30),
           height: wp(45),
@@ -34,10 +45,10 @@ const BookStatusCard = () => {
       />
       <View style={styles.completedContainer}>
         <Text style={styles.BookcompleteHead}>
-          Supreme Personality of Godhead
+         { props?.bookName || "Supreme Personality of Godhead"}
         </Text>
-        <Text style={styles.subtitle}>By Prabhupada</Text>
-        <Text style={[styles.bigText, { color: colors.primary }]}>46%</Text>
+        <Text style={styles.subtitle}>By {  props?.author || "Prabhupada"}</Text>
+        <Text style={[styles.bigText, { color: colors.primary }]}>{percents.toFixed(0)}%</Text>
       </View>
     </View>
   );
@@ -57,7 +68,7 @@ const makeStyles = ({ wp, hp }: StyleProps) =>
       // backgroundColor:"red",
     },
     subtitle: {
-      fontSize: wp(5),
+      fontSize: wp(4),
     },
     BookcompleteHead: {
       fontSize: wp(6),

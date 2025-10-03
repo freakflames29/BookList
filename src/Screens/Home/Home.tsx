@@ -1,4 +1,4 @@
-import { View, Text, Button, Image, SectionList } from 'react-native';
+import { View, Text, Button, Image, SectionList, FlatList } from 'react-native';
 import React from 'react';
 import makeStyles from './HomeStyle';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -16,6 +16,7 @@ import { ScreenTypes } from '../../Adapter/Navigation/ScreenTypes';
 import { MMKVStorageController } from '../../Adapter/Storage/MMKVStorageController';
 import { useAppDispatch } from '../../Adapter/Redux/useAppDispatch';
 import { userActions } from '../../Adapter/Redux/Slices/userSlice';
+import useBooks from '../../Adapter/firebase/useBooks';
 
 const Home = () => {
   const { wp, hp } = useResponsive();
@@ -23,8 +24,9 @@ const Home = () => {
   const { googleSignOut } = useFirebaseAuth();
   const user = useAppSelector(state => state.userReducer.user);
   const dispatch = useAppDispatch();
+  const { books, loading } = useBooks();
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const logout = () => {
     googleSignOut()
       .then(() => {
@@ -55,7 +57,7 @@ const Home = () => {
     },
     {
       title: 'Your Books',
-      data: Array(10).fill(1),
+      data: books,
     },
   ];
 
@@ -65,43 +67,19 @@ const Home = () => {
         <View style={styles.headingContainer}>
           <Text style={styles.text}>Your</Text>
           <Text style={[styles.text, styles.bigText]}>Books</Text>
-          {/* <Button title="logut" onPress={logout} /> */}
+          <Button
+            title="AddBook"
+            onPress={() => navigation.navigate(ScreenTypes.Book)}
+          />
         </View>
 
-        <SectionList
-          sections={sections}
+      <BlankSpace height={hp(5)} />
+        <FlatList
+          data={books || []}
           keyExtractor={(item, index) => index.toString()}
-          renderSectionHeader={({ section: { title } }) => (
-            <View style={{ paddingVertical: hp(2) }}>
-              <Text style={[styles.text, { marginLeft: wp(5) }]}>{title}</Text>
-            </View>
-          )}
-          renderItem={({ item, section }) => {
-            if (section.title === 'New Hot Books') {
-              // 🔹 First Section: horizontal books
-              return (
-                <View style={styles.wrapperList}>
-                  <SectionList
-                    sections={[{ title: '', data: item }]}
-                    horizontal
-                    contentContainerStyle={styles.rowView}
-                    renderItem={() => <BookCard bookImage={BOOK_IMAGE} />}
-                  />
-                  <View style={styles.shelf}>
-                    <Image source={imagePath.screw} style={styles.screwImg} />
-                    <Image source={imagePath.screw} style={styles.screwImg} />
-                  </View>
-                </View>
-              );
-            } else {
-              // 🔹 Second Section: grid books
-              return <BookStatusCard />;
-            }
+          renderItem={({ item }) => {
+            return <BookStatusCard bookName={item?.title} author={item?.author} currentPage={item?.currentPage} totalPages={item?.totalPages} status={item?.status} bookImage={item?.image} />;
           }}
-          // numColumns={2}
-          // columnWrapperStyle={{
-          // justifyContent: 'space-evenly',
-          // }}
           ItemSeparatorComponent={() => <BlankSpace height={wp(4)} />}
           contentContainerStyle={styles.colviewFlatlist}
         />
@@ -111,3 +89,16 @@ const Home = () => {
 };
 
 export default Home;
+
+// <View style={styles.wrapperList}>
+//               <SectionList
+//                 sections={[{ title: '', data: item }]}
+//                 horizontal
+//                 contentContainerStyle={styles.rowView}
+//                 renderItem={() => <BookCard bookImage={BOOK_IMAGE} />}
+//               />
+//               <View style={styles.shelf}>
+//                 <Image source={imagePath.screw} style={styles.screwImg} />
+//                 <Image source={imagePath.screw} style={styles.screwImg} />
+//               </View>
+//             </View>

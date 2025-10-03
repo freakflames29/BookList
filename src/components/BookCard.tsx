@@ -17,6 +17,7 @@ type BookCardProps = {
 const BookCard = ({bookImage,bookName,style,borderRadius=20}:BookCardProps) => {
   const { wp, hp } = useResponsive();
   const styles = makeStyles({ wp, hp,borderRadius });
+  console.log("The book image from book card>>>",bookImage)
 
   return (
     <View style={[styles.imageView,style]}>
