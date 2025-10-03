@@ -11,3 +11,8 @@ type BlankSpaceProp = {
 export const BlankSpace: React.FC<BlankSpaceProp> = ({ style, height, width, backgroundColor }) => {
     return <View style={[{ height, width, backgroundColor }, style]} />;
 };
+
+
+
+
+

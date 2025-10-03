@@ -1,9 +1,11 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Alert } from 'react-native';
 import React from 'react';
 import makeStyles from './SiginStyle';
 import { useResponsive } from '../../hooks/useResponsive';
 import SafePlace from '../../components/SafePlace';
 import { imagePath } from '../../utils/imagepath';
+import AppButton from '../../components/AppButton';
+import { BlankSpace } from '../../components/BlankSpace';
 
 const SignIn = () => {
   const { wp, hp } = useResponsive();
@@ -17,13 +19,10 @@ const SignIn = () => {
         <Text style={styles.smallText}>Smart way to track your reads</Text>
 
         <View style={styles.imageView}>
-          <Image
-            source={imagePath.signin}
-            style={styles.image}
-          />
+          <Image source={imagePath.signin} style={styles.image} />
         </View>
-
-        
+        <BlankSpace height={hp(10)} />
+        <AppButton text="Continue with Google" onPress={() => Alert.alert("Hi")} />
       </View>
     </SafePlace>
   );
