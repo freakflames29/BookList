@@ -36,6 +36,7 @@ import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
 } from 'react-native-reanimated';
+import NoBooks from '../../components/NoBooks';
 const Home = () => {
   const { wp, hp } = useResponsive();
   const styles = makeStyles({ wp, hp });
@@ -240,6 +241,7 @@ const Home = () => {
         <Animated.FlatList
           onScroll={scrollHandler}
           data={books || []}
+          ListEmptyComponent={<NoBooks />}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => {
             return (

@@ -1,3 +1,4 @@
+import { AnimationObject } from 'lottie-react-native';
 import { ImageRequireSource } from 'react-native';
 
 export const imagePath = {
@@ -5,4 +6,5 @@ export const imagePath = {
   krishna: require('../assets/images/krishna.jpeg') as ImageRequireSource,
   screw: require('../assets/images/screw.png') as ImageRequireSource,
   prabhu: require('../assets/images/prabhu.jpeg') as ImageRequireSource,
+  booklottie: require('../assets/lotties/Books.json') as | AnimationObject,
 };
