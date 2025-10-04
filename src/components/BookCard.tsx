@@ -51,6 +51,7 @@ const makeStyles = ({ wp, hp,borderRadius }: StyleProps) =>
       // backgroundColor:"red",
       width: wp(40),
       height: wp(60),
+      // elevation: 5,
       // borderRadius: wp(3),
     },
   });

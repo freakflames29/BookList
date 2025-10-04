@@ -65,7 +65,12 @@ const makeStyles = ({ wp, hp }: StyleProps) =>
       // marginVertical:wp(8),
       paddingLeft: wp(2),
       gap: wp(3),
-      width: '70%',
+      width: '65%',
+      // borderWidth:1,  
+      padding:wp(2),
+      marginLeft:wp(2), 
+      borderRadius:wp(4),
+      borderColor:"rgba(0, 0, 0, 0.1)",
       // backgroundColor:"red",
     },
     subtitle: {

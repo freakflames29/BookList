@@ -8,8 +8,9 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Keyboard,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import makeStyles from './HomeStyle';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import useFirebaseAuth from '../../hooks/useGoogleAuth';
@@ -37,6 +38,7 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated';
 import NoBooks from '../../components/NoBooks';
+import TopSheet from '../../components/TopSheet';
 const Home = () => {
   const { wp, hp } = useResponsive();
   const styles = makeStyles({ wp, hp });
@@ -50,6 +52,10 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState<string>();
   const [totalPages, setTotalPages] = useState<string>();
   const [updateBookLoading, setUpdateBookLoading] = useState<boolean>(false);
+  const [topSheetVisible, setTopSheetVisible] = useState<boolean>(false);
+
+  const [searchText, setSearchText] = useState<string>('');
+  const inputRef = useRef<TextInput>(null);
 
   // ✅ Precompute numbers outside of worklet
   const bigFontSize = wp(15);
@@ -116,8 +122,73 @@ const Home = () => {
       });
   };
 
+  useEffect(() => {
+    if (topSheetVisible) {
+      // Delay focus until animation completes
+      const timeout = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 400); // Adjust timing if animation slower/faster
+      return () => clearTimeout(timeout);
+    }
+    if(searchText.length<0){
+      
+    }
+  }, [topSheetVisible,searchText]);
+
+  const filtereBooks = useMemo(() => {
+    if (searchText.length === 0) {
+      return books;
+    }
+    return books.filter(book => {
+      return book.title.toLowerCase().includes(searchText.toLowerCase());
+    });
+  }, [books, searchText]);
+
   return (
     <SafePlace top>
+      <TopSheet
+        visible={topSheetVisible}
+        onClose={() => {
+          Keyboard.dismiss();
+          setTopSheetVisible(false);
+        }}
+      >
+        <View
+          style={{
+            height: hp(15),
+            width: '100%',
+          }}
+        >
+          <Text style={styles.serachText}>Search for books</Text>
+          <View style={styles.searchBoxWrapper}>
+            <TextInput
+              ref={inputRef}
+              value={searchText}
+              onChangeText={setSearchText}
+              placeholder="Search for books"
+              placeholderTextColor={colors.text}
+              style={styles.searchBox}
+            />
+            <TouchableOpacity
+            onPress={()=>{
+              setSearchText("");
+              Keyboard.dismiss()
+              setTopSheetVisible(false);
+            }}
+            style={{
+              justifyContent:"center",
+              alignItems:"center",
+              width:"10%",
+              height:"100%",
+              paddingTop:wp(4),
+              // backgroundColor:"blue"
+            }}>
+              <MaterialIcons name="clear" size={wp(8)} color={colors.danger} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TopSheet>
+
       <ActionSheet ref={actionSheetRef}>
         <View
           style={{
@@ -214,7 +285,9 @@ const Home = () => {
       </ActionSheet>
 
       <View style={styles.nav}>
-        <MaterialIcons name="search" size={wp(8)} color={colors.text} />
+        <TouchableOpacity onPress={() => setTopSheetVisible(true)}>
+          <MaterialIcons name="search" size={wp(8)} color={colors.text} />
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate(ScreenTypes.Profile)}
         >
@@ -240,7 +313,7 @@ const Home = () => {
         <BlankSpace height={hp(5)} />
         <Animated.FlatList
           onScroll={scrollHandler}
-          data={books || []}
+          data={filtereBooks || []}
           ListEmptyComponent={<NoBooks />}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => {

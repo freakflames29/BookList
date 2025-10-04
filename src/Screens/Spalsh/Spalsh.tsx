@@ -46,7 +46,7 @@ const Spalsh = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      checking();
+      // checking();
     }, 2000);
     return () => {
       clearTimeout(timeout);
@@ -70,25 +70,37 @@ const Spalsh = () => {
         backgroundColor={'transparent'}
         barStyle={'light-content'}
       />
-
-      <Text
+      <View
         style={{
-          fontSize: wp(20),
-          fontFamily: FontsVariant.UrbanistBold,
-          color: colors.background,
+          // height: hp(35),
+          // marginTop: hp(60),
+          // backgroundColor: colors.background,
+          width: '100%',
+          justifyContent:"center",
+          alignItems: 'center',
+          borderRadius: hp(5),
         }}
       >
-        Booky
-      </Text>
-      <Text
-        style={{
-          fontSize: wp(6),
-          fontFamily: FontsVariant.UrbanistRegular,
-          color: colors.background,
-        }}
-      >
-        Track your reads
-      </Text>
+        <Text
+          style={{
+            fontSize: wp(20),
+            fontFamily: FontsVariant.UrbanistBold,
+            color: colors.text,
+            // backgroundColor:'red',
+          }}
+        >
+          Booky
+        </Text>
+        <Text
+          style={{
+            fontSize: wp(6),
+            fontFamily: FontsVariant.UrbanistRegular,
+            color: colors.text,
+          }}
+        >
+          Track your reads
+        </Text>
+      </View>
     </ImageBackground>
   );
 };

@@ -30,6 +30,8 @@ const NoBooks = () => {
         style={{
           width: wp(50),
           height: wp(50),
+          justifyContent: 'center',
+          alignItems: 'center',
           //   marginBottom: wp(5),
         }}
       />

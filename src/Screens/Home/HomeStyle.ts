@@ -29,75 +29,89 @@ const makeStyles = ({ wp, hp }: StyleProps) =>
       fontFamily: FontsVariant.UrbanistBlack,
       lineHeight: wp(13),
     },
-    rowView:{
+    rowView: {
       // flexDirection:'row',
-      gap:wp(3),
-      paddingHorizontal:wp(5),
+      gap: wp(3),
+      paddingHorizontal: wp(5),
       // justifyContent:'space-between',
     },
-    colviewFlatlist:{
-      width:"100%",
-      gap:wp(3),
-      paddingBottom:hp(5),
+    colviewFlatlist: {
+      width: '100%',
+      gap: wp(3),
+      paddingBottom: hp(5),
       // backgroundColor:"red",
-
-
     },
-    wrapperList:{
+    wrapperList: {
       // width:wp(100),
-      position:"relative",
-      marginBottom:hp(5),
+      position: 'relative',
+      marginBottom: hp(5),
     },
-    shelf:{
-      width:"96%",
-      height:wp(21),
-      backgroundColor:"rgba(255, 105, 18, 0.7)",
-      position:"absolute",
-      bottom:-wp(4),
-      borderRadius:wp(5),
-      alignItems:"center",
-      justifyContent:"space-between",
-      flexDirection:"row",
-      paddingHorizontal:wp(3),
-      borderWidth:2,
-      borderColor:"rgba(255, 105, 18, 0.7)",
-      marginHorizontal:wp(2),
-      marginRight:wp(2),
+    shelf: {
+      width: '96%',
+      height: wp(21),
+      backgroundColor: 'rgba(255, 105, 18, 0.7)',
+      position: 'absolute',
+      bottom: -wp(4),
+      borderRadius: wp(5),
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flexDirection: 'row',
+      paddingHorizontal: wp(3),
+      borderWidth: 2,
+      borderColor: 'rgba(255, 105, 18, 0.7)',
+      marginHorizontal: wp(2),
+      marginRight: wp(2),
     },
-    screwImg:{
-      width:wp(5),
-      height:wp(5),
-      elevation:5,
+    screwImg: {
+      width: wp(5),
+      height: wp(5),
+      elevation: 5,
     },
-    BookcompleteHeading:{
-      fontSize:wp(6),
-      flexWrap:"wrap",
+    BookcompleteHeading: {
+      fontSize: wp(6),
+      flexWrap: 'wrap',
     },
-    completedContainer:{
+    completedContainer: {
       // marginVertical:wp(8),
-      paddingLeft:wp(2),
-      gap:wp(3),
-      width:"90%",
+      paddingLeft: wp(2),
+      gap: wp(3),
+      width: '90%',
       // backgroundColor:"red",
-
     },
-    subtitle:{
-        fontSize:wp(5),
+    subtitle: {
+      fontSize: wp(5),
     },
-    BookcompleteHead:{
-      fontSize:wp(6),
-      fontFamily:FontsVariant.UrbanistSemiBold,
+    BookcompleteHead: {
+      fontSize: wp(6),
+      fontFamily: FontsVariant.UrbanistSemiBold,
     },
-    nav:{
-      width:"100%",
-      height:hp(8),
-      justifyContent:"space-between",
-      alignItems:"center",
-      flexDirection:"row",
-      paddingHorizontal:wp(5),
-      backgroundColor:colors.background,
+    nav: {
+      width: '100%',
+      height: hp(8),
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexDirection: 'row',
+      paddingHorizontal: wp(5),
+      backgroundColor: colors.background,
+    },
+    serachText: {
+      fontFamily: FontsVariant.UrbanistSemiBold,
+      fontSize: wp(6),
+    },
+    searchBox: {
+      width: '85%',
+      backgroundColor: colors.cream,
+      color: colors.text,
+      padding: wp(5),
+      marginTop: wp(5),
+      borderRadius: wp(2),
+    },
+    searchBoxWrapper:{
+      width:'100%',
+      flexDirection:'row',
+      justifyContent:'space-between',
+      alignItems:'center',
     }
-    
   });
 
 export default makeStyles;
