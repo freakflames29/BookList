@@ -1,4 +1,14 @@
-import { View, Text, Button, Image, SectionList, FlatList, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  Image,
+  SectionList,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import React, { useRef, useState } from 'react';
 import makeStyles from './HomeStyle';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -19,6 +29,7 @@ import { userActions } from '../../Adapter/Redux/Slices/userSlice';
 import useBooks from '../../Adapter/firebase/useBooks';
 import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
 import FontsVariant from '../../utils/FontsVariant';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
 
 const Home = () => {
   const { wp, hp } = useResponsive();
@@ -26,33 +37,12 @@ const Home = () => {
   const { googleSignOut } = useFirebaseAuth();
   const user = useAppSelector(state => state.userReducer.user);
   const dispatch = useAppDispatch();
-  const { books, loading,updateBook } = useBooks();
+  const { books, loading, updateBook } = useBooks();
   const actionSheetRef = useRef<ActionSheetRef>(null);
-  const [bookId,setBookId] = useState<string>('')
+  const [bookId, setBookId] = useState<string>('');
   const navigation = useNavigation<any>();
-  const [currentPage,setCurrentPage] = useState<string>()
-  const [totalPages,setTotalPages] = useState<string>()
-  const logout = () => {
-    googleSignOut()
-      .then(() => {
-        console.log('Logged out');
-        MMKVStorageController.CLEAR_ALL();
-        dispatch(userActions.removeUser());
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              {
-                name: ScreenTypes.SignIn,
-              },
-            ],
-          }),
-        );
-      })
-      .catch(e => {
-        console.log('Error while logging out', e);
-      });
-  };
+  const [currentPage, setCurrentPage] = useState<string>();
+  const [totalPages, setTotalPages] = useState<string>();
 
   // 🔹 Sectioned Data
   const sections = [
@@ -66,89 +56,136 @@ const Home = () => {
     },
   ];
 
-
-  const updateBookHandler = ()=>{
-    console.log("The book id>>>",bookId)
-    console.log("The book Page>>>",parseInt(currentPage))
-    updateBook(bookId,{currentPage:parseInt(currentPage)}).then(res=>{
-      console.log("The book updated successfully>>>",res)
-    }).catch(e=>{
-      console.log("Error updating book>>>",e)
-    })
-    .finally(()=>{
-      actionSheetRef.current?.hide()
-    })
-
-  }
+  const updateBookHandler = () => {
+    console.log('The book id>>>', bookId);
+    console.log('The book Page>>>', parseInt(currentPage));
+    updateBook(bookId, { currentPage: parseInt(currentPage) })
+      .then(res => {
+        console.log('The book updated successfully>>>', res);
+      })
+      .catch(e => {
+        console.log('Error updating book>>>', e);
+      })
+      .finally(() => {
+        actionSheetRef.current?.hide();
+      });
+  };
 
   return (
     <SafePlace top>
       <ActionSheet ref={actionSheetRef}>
-          <View style={{height:hp(30),width:"100%",padding:wp(8),position:"relative"}}>
-
-            <View style={{
-              width:wp(29),
-              height:wp(29),
-              borderRadius:wp(50),
-              backgroundColor:colors.primary,
-              position:"absolute",
-              top:-wp(15),
-              right:"10%",
-              justifyContent:"center",
-              alignItems:"center",
-            }}>
-            <Text style={{fontSize:wp(3),fontFamily:FontsVariant.UrbanistSemiBold,color:colors.text}}>Total Pages</Text>
-            <Text style={{fontSize:wp(5),fontFamily:FontsVariant.UrbanistSemiBold,color:colors.text}}>{totalPages}</Text>
-
-            </View>
-
-
-            <Text style={{fontSize:wp(5),fontFamily:FontsVariant.UrbanistSemiBold,color:colors.text}}>Update Book</Text>
-            <TextInput
-              value={currentPage}
-              keyboardType='number-pad'
-              onChangeText={setCurrentPage}
-              placeholder="Current Page"
-              placeholderTextColor={colors.text}
-              style={{
-                width:"100%",
-                backgroundColor:colors.cream,
-                color:colors.text,
-                padding:wp(5),
-                marginTop:wp(5),
-                borderRadius:wp(2),
-            
-              }}
-           
-            />
-            <BlankSpace height={hp(5)}/>
-            <TouchableOpacity
+        <View
+          style={{
+            height: hp(30),
+            width: '100%',
+            padding: wp(8),
+            position: 'relative',
+          }}
+        >
+          <View
             style={{
-              width:"100%",
-              height:hp(6),
-              backgroundColor:colors.primary,
-              justifyContent:"center",
-              alignItems:"center",
-              borderRadius:wp(100),
+              width: wp(29),
+              height: wp(29),
+              borderRadius: wp(50),
+              backgroundColor: colors.primary,
+              position: 'absolute',
+              top: -wp(15),
+              right: '10%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text
+              style={{
+                fontSize: wp(3),
+                fontFamily: FontsVariant.UrbanistSemiBold,
+                color: colors.text,
+              }}
+            >
+              Total Pages
+            </Text>
+            <Text
+              style={{
+                fontSize: wp(5),
+                fontFamily: FontsVariant.UrbanistSemiBold,
+                color: colors.text,
+              }}
+            >
+              {totalPages}
+            </Text>
+          </View>
+
+          <Text
+            style={{
+              fontSize: wp(5),
+              fontFamily: FontsVariant.UrbanistSemiBold,
+              color: colors.text,
+            }}
+          >
+            Update Book
+          </Text>
+          <TextInput
+            value={currentPage}
+            keyboardType="number-pad"
+            onChangeText={setCurrentPage}
+            placeholder="Current Page"
+            placeholderTextColor={colors.text}
+            style={{
+              width: '100%',
+              backgroundColor: colors.cream,
+              color: colors.text,
+              padding: wp(5),
+              marginTop: wp(5),
+              borderRadius: wp(2),
+            }}
+          />
+          <BlankSpace height={hp(5)} />
+          <TouchableOpacity
+            style={{
+              width: '100%',
+              height: hp(6),
+              backgroundColor: colors.primary,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: wp(100),
             }}
             onPress={updateBookHandler}
-            >
-              {loading ? <ActivityIndicator size="small" color={colors.primary} /> : <Text style={{
-                fontSize:wp(5),
-                fontFamily:FontsVariant.UrbanistSemiBold,
-              }}>Update</Text>}
-            </TouchableOpacity>
-          </View>
+          >
+            {loading ? (
+              <ActivityIndicator size="small" color={colors.primary} />
+            ) : (
+              <Text
+                style={{
+                  fontSize: wp(5),
+                  fontFamily: FontsVariant.UrbanistSemiBold,
+                }}
+              >
+                Update
+              </Text>
+            )}
+          </TouchableOpacity>
+        </View>
       </ActionSheet>
+
+      <View style={styles.nav}>
+        <MaterialIcons name="search" size={wp(8)} color={colors.text} />
+        <TouchableOpacity
+          onPress={() => navigation.navigate(ScreenTypes.Profile)}
+        >
+          <MaterialIcons
+            name="account-circle"
+            size={wp(8)}
+            color={colors.text}
+          />
+        </TouchableOpacity>
+        {/* <Text>Hello</Text> */}
+      </View>
+
       <View style={styles.container}>
         <View style={styles.headingContainer}>
           <Text style={styles.text}>Your</Text>
           <Text style={[styles.text, styles.bigText]}>Books</Text>
-          <Button
-            title="AddBook"
-            onPress={() => navigation.navigate(ScreenTypes.Book)}
-          />
-          <Button title="Logout" onPress={() => logout()} />
+    
         </View>
 
         <BlankSpace height={hp(5)} />
@@ -164,11 +201,11 @@ const Home = () => {
                 totalPages={item?.totalPages}
                 status={item?.status}
                 bookImage={item?.image}
-                onPress={()=>{
-                  setBookId(item?.id || '')
-                  setTotalPages(item?.totalPages.toString() || "1")
-                  setCurrentPage(item?.currentPage.toString() || "1")
-                  actionSheetRef.current?.show()
+                onPress={() => {
+                  setBookId(item?.id || '');
+                  setTotalPages(item?.totalPages.toString() || '1');
+                  setCurrentPage(item?.currentPage.toString() || '1');
+                  actionSheetRef.current?.show();
                 }}
               />
             );

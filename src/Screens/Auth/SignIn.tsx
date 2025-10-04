@@ -43,7 +43,7 @@ const SignIn = () => {
           <Image source={imagePath.signin} style={styles.image} />
         </View>
         <BlankSpace height={hp(10)} />
-        <AppButton text="Continue with Google" onPress={() => siginHandler()} />
+        <AppButton text="Continue with Google" showGoogle onPress={() => siginHandler()} />
       </View>
     </SafePlace>
   );

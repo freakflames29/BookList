@@ -3,6 +3,7 @@ export enum ScreenTypes {
 
   // ---------- Auth ----------
   SignIn = 'SignIn',
+  Profile = 'Profile',
 
 
   // ---------- Home ----------
@@ -17,4 +18,5 @@ export type ScreenParamList = {
   [ScreenTypes.SignIn]: undefined;
   [ScreenTypes.Home]: {userId:string};
   [ScreenTypes.Book]:undefined;
+  [ScreenTypes.Profile]:undefined;
 };

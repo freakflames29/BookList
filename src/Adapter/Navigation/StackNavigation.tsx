@@ -4,6 +4,7 @@ import { ScreenTypes,ScreenParamList } from './ScreenTypes';
 import Home from '../../Screens/Home/Home';
 import Spalsh from '../../Screens/Spalsh/Spalsh';
 import AddBook from '../../Screens/Books/AddBook';
+import Profile from '../../Screens/Auth/Profile';
 
 const Stack = createStackNavigator<ScreenParamList>();
 
@@ -16,6 +17,7 @@ const StackNavigation = () => {
 
       {/* Auth Screens */}
       <Stack.Screen name={ScreenTypes.SignIn} component={SignIn} />
+      <Stack.Screen name={ScreenTypes.Profile} component={Profile} />
       <Stack.Screen name={ScreenTypes.Spalsh} component={Spalsh} />
 
 

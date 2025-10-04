@@ -38,7 +38,8 @@ const makeStyles = ({ wp, hp }: StyleProps) =>
     colviewFlatlist:{
       width:"100%",
       gap:wp(3),
-  
+      paddingBottom:hp(5),
+      // backgroundColor:"red",
 
 
     },
@@ -86,6 +87,15 @@ const makeStyles = ({ wp, hp }: StyleProps) =>
     BookcompleteHead:{
       fontSize:wp(6),
       fontFamily:FontsVariant.UrbanistSemiBold,
+    },
+    nav:{
+      width:"100%",
+      height:hp(8),
+      justifyContent:"space-between",
+      alignItems:"center",
+      flexDirection:"row",
+      paddingHorizontal:wp(5),
+      backgroundColor:colors.background,
     }
     
   });

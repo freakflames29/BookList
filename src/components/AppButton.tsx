@@ -12,6 +12,8 @@ type AppButtonProps = {
   style?: ViewStyle;
   text?: string;
   onPress?: () => void;
+  icon?: React.ReactNode;
+  showGoogle?: boolean;
 };
 
 const AppButton: React.FC<AppButtonProps> = props => {
@@ -19,7 +21,10 @@ const AppButton: React.FC<AppButtonProps> = props => {
   const styles = makeStyles({ wp, hp });
   return (
     <Pressable style={[styles.container, props.style]} onPress={props.onPress}>
-      <Icon name="google" size={wp(5)} color={colors.text} />
+      {props.showGoogle && (
+        <Icon name="google" size={wp(5)} color={colors.text} />
+      )}
+      {props.icon && props.icon}
       <Text style={styles.text}>{props.text}</Text>
       {/* <View style={styles.roundCircle}>
       <Icon name="arrow-circle-o-right" size={wp(5)} color={colors.primary} />
@@ -48,7 +53,7 @@ const makeStyles = ({ wp, hp }: StyleProps) =>
       color: colors.text,
       fontSize: wp(5),
       fontFamily: FontsVariant.UrbanistBold,
-    //   marginRight: wp(5),
+      //   marginRight: wp(5),
     },
     roundCircle: {
       position: 'absolute',

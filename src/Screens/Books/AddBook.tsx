@@ -4,12 +4,16 @@ import SafePlace from '../../components/SafePlace';
 import useBooks, { Book } from '../../Adapter/firebase/useBooks';
 import { useAppSelector } from '../../Adapter/Redux/useAppSelector';
 import { useNavigation } from '@react-navigation/native';
+import makeStyles from './AddBookStyle';
+import { colors } from '../../utils/colors';
+import AppButton from '../../components/AppButton';
 
 const AddBook = () => {
   const { addBook } = useBooks();
   const user = useAppSelector(state => state.userReducer.user);
   const [bookName, setBookName] = React.useState<string>('');
- const navigation = useNavigation();
+  const navigation = useNavigation();
+  const styles = makeStyles();
   const addBookHandler = () => {
     const payload: Book = {
       author: 'Prabhupada',
@@ -19,32 +23,30 @@ const AddBook = () => {
       title: bookName,
       totalPages: 10,
     };
-    addBook(payload).then(res => {
-      console.log('Book added successfully');
-     navigation.goBack()
-    }).catch(e=>{
-      console.log('Error adding book',e)
-    })
+    addBook(payload)
+      .then(res => {
+        console.log('Book added successfully');
+        navigation.goBack();
+      })
+      .catch(e => {
+        console.log('Error adding book', e);
+      });
     console.log('payload', payload);
   };
 
   return (
     <SafePlace top>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>AddBook</Text>
+      <View style={styles.container}>
+        <Text style={styles.headingText}>Add Book</Text>
         <TextInput
           value={bookName}
           onChangeText={setBookName}
           placeholder="Book Name"
-            placeholderTextColor={"red"}
-          style={{
-            width: '80%',
-            backgroundColor:"#000",
-            color:'red'
-        
-          }}
+          placeholderTextColor={colors.text}
+          style={styles.textBoxStyle}
         />
-        <Button title='Add Book' onPress={addBookHandler} />
+        
+        <AppButton text='Add Book' onPress={addBookHandler} />
       </View>
     </SafePlace>
   );
