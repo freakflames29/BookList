@@ -8,4 +8,5 @@ export const imagePath = {
   prabhu: require('../assets/images/signup.png') as ImageRequireSource,
   booklottie: require('../assets/lotties/Books.json') as | AnimationObject,
   booklottie2: require('../assets/lotties/book.json') as | AnimationObject,
+  bluebook: require('../assets/lotties/blue.json') as | AnimationObject,
 };

@@ -39,6 +39,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import NoBooks from '../../components/NoBooks';
 import TopSheet from '../../components/TopSheet';
+import LottieView from 'lottie-react-native';
 const Home = () => {
   const { wp, hp } = useResponsive();
   const styles = makeStyles({ wp, hp });
@@ -144,6 +145,23 @@ const Home = () => {
     });
   }, [books, searchText]);
 
+
+  if(loading){
+    return <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+      <LottieView
+        source={imagePath.bluebook}
+        autoPlay
+        loop
+        style={{
+          width: wp(100),
+          height: wp(100),
+          justifyContent: 'center',
+          alignItems: 'center',
+     
+        }}
+      />
+    </View>
+  }
   return (
     <SafePlace top>
       <TopSheet
