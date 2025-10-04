@@ -13,6 +13,7 @@ import { ScreenTypes } from '../../Adapter/Navigation/ScreenTypes';
 import { SignInSuccessResponse } from '@react-native-google-signin/google-signin';
 import { useAppDispatch } from '../../Adapter/Redux/useAppDispatch';
 import { userActions } from '../../Adapter/Redux/Slices/userSlice';
+import  {BlurView} from "@react-native-community/blur"
 
 const Spalsh = () => {
   const { wp, hp } = useResponsive();
@@ -46,7 +47,7 @@ const Spalsh = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      // checking();
+      checking();
     }, 2000);
     return () => {
       clearTimeout(timeout);
@@ -68,24 +69,28 @@ const Spalsh = () => {
       <StatusBar
         translucent
         backgroundColor={'transparent'}
-        barStyle={'light-content'}
+        barStyle={'dark-content'}
       />
       <View
         style={{
-          // height: hp(35),
-          // marginTop: hp(60),
-          // backgroundColor: colors.background,
+          height: hp(30),
+          marginTop: hp(68),
+          backgroundColor: colors.primary,
           width: '100%',
-          justifyContent:"center",
-          alignItems: 'center',
-          borderRadius: hp(5),
+          // justifyContent:"center",
+          alignItems: 'cetnter',
+          paddingHorizontal:wp(5),
+          borderTopLeftRadius: hp(4),
+          borderTopRightRadius: hp(4),
         }}
       >
         <Text
           style={{
-            fontSize: wp(20),
-            fontFamily: FontsVariant.UrbanistBold,
-            color: colors.text,
+            marginTop:wp(5),
+            fontSize: wp(30),
+            fontFamily: FontsVariant.UrbanistBlack,
+            color: colors.background,
+            lineHeight:wp(29),
             // backgroundColor:'red',
           }}
         >
@@ -98,8 +103,9 @@ const Spalsh = () => {
             color: colors.text,
           }}
         >
-          Track your reads
+          Track your reads smartly
         </Text>
+
       </View>
     </ImageBackground>
   );
