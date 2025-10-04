@@ -30,7 +30,12 @@ import useBooks from '../../Adapter/firebase/useBooks';
 import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
 import FontsVariant from '../../utils/FontsVariant';
 import { MaterialIcons } from '@react-native-vector-icons/material-icons';
-
+import Animated, {
+  withTiming,
+  useSharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 const Home = () => {
   const { wp, hp } = useResponsive();
   const styles = makeStyles({ wp, hp });
@@ -43,22 +48,60 @@ const Home = () => {
   const navigation = useNavigation<any>();
   const [currentPage, setCurrentPage] = useState<string>();
   const [totalPages, setTotalPages] = useState<string>();
+  const [updateBookLoading, setUpdateBookLoading] = useState<boolean>(false);
 
-  // 🔹 Sectioned Data
-  const sections = [
-    {
-      title: 'New Hot Books',
-      data: [Array(10).fill(1)], // keep inside array to render one row
+  // ✅ Precompute numbers outside of worklet
+  const bigFontSize = wp(15);
+  const smallFontSize = wp(9);
+  const bigSubFont = wp(4);
+  const smallSubFont = wp(3);
+  const bigHeading = hp(15);
+  const smallHeading = hp(5);
+
+  // shared values
+  const fontSize = useSharedValue(bigFontSize);
+  const subFontSize = useSharedValue(bigSubFont);
+  const headingHeight = useSharedValue(bigHeading);
+  const lastOffset = useSharedValue(0);
+
+  // scroll handler
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: event => {
+      const y = event.contentOffset.y;
+
+      if (y > 0) {
+        // scroll up
+        fontSize.value = withTiming(smallFontSize, { duration: 200 });
+        subFontSize.value = withTiming(smallSubFont, { duration: 200 });
+        headingHeight.value = withTiming(smallHeading, { duration: 200 });
+      } else {
+        // scroll down
+        fontSize.value = withTiming(bigFontSize, { duration: 200 });
+        subFontSize.value = withTiming(bigSubFont, { duration: 200 });
+        headingHeight.value = withTiming(bigHeading, { duration: 200 });
+      }
+
+      lastOffset.value = y;
     },
-    {
-      title: 'Your Books',
-      data: books,
-    },
-  ];
+  });
+
+  // animated styles
+  const headingStyle = useAnimatedStyle(() => ({
+    height: headingHeight.value,
+  }));
+
+  const bigTextStyle = useAnimatedStyle(() => ({
+    fontSize: fontSize.value,
+  }));
+
+  const smallTextStyle = useAnimatedStyle(() => ({
+    fontSize: subFontSize.value,
+  }));
 
   const updateBookHandler = () => {
     console.log('The book id>>>', bookId);
     console.log('The book Page>>>', parseInt(currentPage));
+    setUpdateBookLoading(true);
     updateBook(bookId, { currentPage: parseInt(currentPage) })
       .then(res => {
         console.log('The book updated successfully>>>', res);
@@ -67,6 +110,7 @@ const Home = () => {
         console.log('Error updating book>>>', e);
       })
       .finally(() => {
+        setUpdateBookLoading(false);
         actionSheetRef.current?.hide();
       });
   };
@@ -122,7 +166,7 @@ const Home = () => {
               color: colors.text,
             }}
           >
-            Update Book
+            Where are you now ?
           </Text>
           <TextInput
             value={currentPage}
@@ -141,6 +185,7 @@ const Home = () => {
           />
           <BlankSpace height={hp(5)} />
           <TouchableOpacity
+            disabled={updateBookLoading}
             style={{
               width: '100%',
               height: hp(6),
@@ -151,8 +196,8 @@ const Home = () => {
             }}
             onPress={updateBookHandler}
           >
-            {loading ? (
-              <ActivityIndicator size="small" color={colors.primary} />
+            {updateBookLoading ? (
+              <ActivityIndicator size={wp(5)} color={colors.text} />
             ) : (
               <Text
                 style={{
@@ -182,14 +227,18 @@ const Home = () => {
       </View>
 
       <View style={styles.container}>
-        <View style={styles.headingContainer}>
-          <Text style={styles.text}>Your</Text>
-          <Text style={[styles.text, styles.bigText]}>Books</Text>
-    
-        </View>
+        <Animated.View style={[styles.headingContainer, headingStyle]}>
+          <Animated.Text style={[styles.text, smallTextStyle]}>
+            Your
+          </Animated.Text>
+          <Animated.Text style={[styles.text, styles.bigText, bigTextStyle]}>
+            Books
+          </Animated.Text>
+        </Animated.View>
 
         <BlankSpace height={hp(5)} />
-        <FlatList
+        <Animated.FlatList
+          onScroll={scrollHandler}
           data={books || []}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => {

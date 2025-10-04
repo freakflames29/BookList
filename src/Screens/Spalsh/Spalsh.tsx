@@ -17,7 +17,7 @@ import { userActions } from '../../Adapter/Redux/Slices/userSlice';
 const Spalsh = () => {
   const { wp, hp } = useResponsive();
   const navigation = useNavigation();
-  const dispatch  = useAppDispatch()
+  const dispatch = useAppDispatch();
   const checking = () => {
     try {
       const data = MMKVStorageController.GET_DATA(
@@ -25,7 +25,7 @@ const Spalsh = () => {
       );
 
       if (data?.data) {
-        dispatch(userActions.setUser(data))
+        dispatch(userActions.setUser(data));
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
@@ -36,7 +36,7 @@ const Spalsh = () => {
             ],
           }),
         );
-      }else{
+      } else {
         navigation.navigate(ScreenTypes.SignIn);
       }
     } catch (e) {
@@ -44,9 +44,14 @@ const Spalsh = () => {
     }
   };
 
-  useEffect(()=>{
-    checking()
-  },[])
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      checking();
+    }, 2000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
 
   return (
     <ImageBackground
