@@ -55,6 +55,7 @@ const useBooks = () => {
 
   // 🔹 Add a book
   const addBook = useCallback(async (book: Book) => {
+    setLoading(true)
     try {
       if (!user) throw new Error("No user logged in");
       await firestore()
@@ -66,7 +67,10 @@ const useBooks = () => {
     } catch (e: any) {
       console.error("Error adding book:", e);
       setError(e.message);
+    }finally{
+      setLoading(false)
     }
+
   }, [user]);
 
   // 🔹 Update a book

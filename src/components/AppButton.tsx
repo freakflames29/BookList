@@ -1,4 +1,11 @@
-import { View, Text, ViewStyle, StyleSheet, Pressable } from 'react-native';
+import {
+  View,
+  Text,
+  ViewStyle,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import { useResponsive } from '../hooks/useResponsive';
 import FontsVariant from '../utils/FontsVariant';
@@ -14,18 +21,24 @@ type AppButtonProps = {
   onPress?: () => void;
   icon?: React.ReactNode;
   showGoogle?: boolean;
+  loading?: boolean;
 };
 
 const AppButton: React.FC<AppButtonProps> = props => {
   const { wp, hp } = useResponsive();
   const styles = makeStyles({ wp, hp });
   return (
-    <Pressable style={[styles.container, props.style]} onPress={props.onPress}>
+    <Pressable style={[styles.container, props.style]} onPress={props.onPress} disabled={props.loading}>
       {props.showGoogle && (
         <Icon name="google" size={wp(5)} color={colors.text} />
       )}
       {props.icon && props.icon}
-      <Text style={styles.text}>{props.text}</Text>
+
+      {props.loading ? (
+        <ActivityIndicator size={wp(5)} color={colors.text} />
+      ) : (
+        <Text style={styles.text}>{props.text}</Text>
+      )}
       {/* <View style={styles.roundCircle}>
       <Icon name="arrow-circle-o-right" size={wp(5)} color={colors.primary} />
 
