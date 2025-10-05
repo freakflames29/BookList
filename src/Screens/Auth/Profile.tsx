@@ -22,6 +22,8 @@ const Profile = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
+  console.log("The user info userslice ",user);
+
   const logout = () => {
     googleSignOut()
       .then(() => {
@@ -61,7 +63,7 @@ const Profile = () => {
         }}
       >
         <Image
-          source={{ uri: user?.data?.user?.photo || '' }}
+          source={{ uri: user?.user?.photoURL || '' }}
           style={{
             width: 100,
             height: 100,
@@ -75,14 +77,14 @@ const Profile = () => {
             fontFamily: FontsVariant.UrbanistBold,
           }}
         >
-          {user?.data?.user?.name}
+          {user?.user?.displayName}
         </Text>
         <Text
           style={{
             fontFamily: FontsVariant.UrbanistSemiBold,
           }}
         >
-          {user?.data?.user?.email}
+          {user?.user?.email}
         </Text>
       </View>
       <View style={{

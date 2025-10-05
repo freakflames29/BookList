@@ -1,8 +1,9 @@
+import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { SignInSuccessResponse } from '@react-native-google-signin/google-signin';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface UserState {
-  user: SignInSuccessResponse | undefined;
+  user: FirebaseAuthTypes.UserCredential | undefined;
 }
 const initialState: UserState = {
   user: undefined,

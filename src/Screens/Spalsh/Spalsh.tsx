@@ -25,7 +25,7 @@ const Spalsh = () => {
         PersistanceStorageKey.USER_INFO,
       );
 
-      if (data?.data) {
+      if (data) {
         dispatch(userActions.setUser(data));
         navigation.dispatch(
           CommonActions.reset({

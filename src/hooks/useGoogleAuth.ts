@@ -6,6 +6,7 @@ import {
   isErrorWithCode,
   SignInSuccessResponse,
 } from '@react-native-google-signin/google-signin';
+import auth from "@react-native-firebase/auth"
 import React from 'react';
 
 GoogleSignin.configure({
@@ -25,9 +26,18 @@ const useFirebaseAuth = () => {
       await GoogleSignin.hasPlayServices();
       const res = await GoogleSignin.signIn();
       if (isSuccessResponse(res)) {
-        // console.log(res);
+        console.log("Sigin in Done>>>",res);
+
+        const {idToken} = res?.data
+
+
+        const googleCred = auth.GoogleAuthProvider.credential(idToken);
+
+        const firebaseUser = await auth().signInWithCredential(googleCred);
+        console.log("Firebase User>>>",firebaseUser);
+
         // setUser(res);
-        return res;
+        return firebaseUser;
       } else {
         console.log('User cancelled google sigin ');
       }

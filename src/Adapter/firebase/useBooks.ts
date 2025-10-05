@@ -31,7 +31,7 @@ const useBooks = () => {
 
     const userBooksRef = firestore()
       .collection('books')
-      .doc(user?.data?.user?.id)
+      .doc(user?.user?.uid)
       .collection('userBooks');
 
     const unsubscribe = userBooksRef.onSnapshot(
@@ -60,7 +60,7 @@ const useBooks = () => {
       if (!user) throw new Error("No user logged in");
       await firestore()
         .collection('books')
-        .doc(user?.data?.user?.id)
+        .doc(user?.user?.uid)
         .collection('userBooks')
         .add(book);
       console.log('Book added successfully');
@@ -80,7 +80,7 @@ const useBooks = () => {
       if (!user) throw new Error("No user logged in");
       await firestore()
         .collection('books')
-        .doc(user?.data?.user?.id)
+        .doc(user?.user?.uid)
         .collection('userBooks')
         .doc(bookId)
         .update(updates);
@@ -97,7 +97,7 @@ const useBooks = () => {
       if (!user) throw new Error("No user logged in");
       await firestore()
         .collection('books')
-        .doc(user?.data?.user?.id)
+        .doc(user?.user?.uid)
         .collection('userBooks')
         .doc(bookId)
         .delete();
